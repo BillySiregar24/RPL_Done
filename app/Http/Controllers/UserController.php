@@ -3,80 +3,78 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Kategori;
+use App\Models\User;
 use PHPUnit\Exception;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class KategoriController extends Controller
+class UserController extends Controller
 {
     public function index()
     {
-        $kategori = Kategori::all();
-        return view('backend.content.kategori.list', compact('kategori'));
+        $user = User::all();
+        return view('backend.content.user.list', compact('user'));
     }
 
     public function tambah()
     {
-        return view('backend.content.kategori.formTambah');
+        return view('backend.content.user.formTambah');
     }
 
     public function prosesTambah(Request $request)
     {
         $this->validate($request, [
-            'nama_kategori'=>'required'
+            'name'=>'required',
+            'email'=>'required',
         ]);
 
-        $kategori = new Kategori();
-        $kategori->nama_kategori = $request->nama_kategori;
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = bcrypt('12345678');
 
         try {
-            $kategori->save();
-            return redirect(route('kategori.index'))->with('pesan',['success', 'Berhasil tambah kategori']);
+            $user->save();
+            return redirect(route('user.index'))->with('pesan',['success', 'Berhasil tambah user']);
         }catch (\Exception $e){
-            return redirect(route('kategori.index'))->with('pesan',['danger', 'Gagal tambah kategori']);
+            return redirect(route('user.index'))->with('pesan',['danger', 'Gagal tambah user']);
         }
     }
 
     public function ubah($id)
     {
-        $kategori = Kategori::findOrFail($id);
-        return view('backend.content.kategori.formUbah', compact('kategori'));
+        $user = User::findOrFail($id);
+        return view('backend.content.user.formUbah', compact('user'));
     }
 
     public function prosesUbah(Request $request)
     {
         $this->validate($request, [
-            'id_kategori'=>'required',
-            'nama_kategori'=>'required',
+            'id'=>'required',
+            'name'=>'required',
+            'email'=>'required',
         ]);
 
-        $kategori = Kategori::findOrFail($request->id_kategori);
-        $kategori->nama_kategori = $request->nama_kategori;
+        $user = User::findOrFail($request->id);
+        $user->name = $request->name;
+        $user->email = $request->email;
 
         try {
-            $kategori->save();
-            return redirect(route('kategori.index'))->with('pesan',['success', 'Berhasil ubah kategori']);
+            $user->save();
+            return redirect(route('user.index'))->with('pesan',['success', 'Berhasil ubah user']);
         }catch (\Exception $e){
-            return redirect(route('kategori.index'))->with('pesan',['danger', 'Gagal ubah kategori']);
+            return redirect(route('user.index'))->with('pesan',['danger', 'Gagal ubah user']);
         }
     }
 
     public function hapus($id)
     {
-        $kategori = Kategori::findOrFail($id);
+        $user = User::findOrFail($id);
 
         try {
-            $kategori->delete();
-            return redirect(route('kategori.index'))->with('pesan',['success', 'Berhasil hapus kategori']);
+            $user->delete();
+            return redirect(route('user.index'))->with('pesan',['success', 'Berhasil hapus user']);
         }catch (\Exception $e){
-            return redirect(route('kategori.index'))->with('pesan',['danger', 'Gagal hapus kategori']);
+            return redirect(route('user.index'))->with('pesan',['danger', 'Gagal hapus user']);
         }
-    }
-
-    public function exportPdf()
-    {
-        $kategori = Kategori::all();
-        $pdf = Pdf::loadView('backend.content.kategori.export', compact('kategori'));
-        return $pdf->download('Data Kategori.pdf');
     }
 }

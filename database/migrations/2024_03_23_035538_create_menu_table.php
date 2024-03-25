@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('target_menu');
             $table->integer('urutan_menu');
             $table->integer('parent_menu')->nullable();
-            $table->boolean('status_menu');
+            $table->boolean('status_menu')->default(1);
             $table->timestamps();
         });
     }

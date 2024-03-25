@@ -4,9 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Kategori extends Model
+class Berita extends Model
 {
-    protected $table = "kategori";
-    protected $primaryKey = "id_kategori";
-    protected $fillable = ["nama_kategori"];
+    protected $table = "berita";
+
+    protected $primaryKey = "id_berita";
+
+    protected $fillable = ["judul_berita","isi_berita","gambar_berita","id_kategori", "total_view"];
+    public function kategori(){
+        return $this->belongsTo(Kategori::class,'id_kategori');
+
+    }
 }

@@ -6,13 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Page extends Model
 {
-    protected $table = "berita";
+    protected $table = "page";
 
-    protected $primaryKey = "id_berita";
+    protected $primaryKey = "id_page";
 
-    protected $fillable = ["judul_berita","isi_berita","gambar_berita","id_kategori"];
-    public function kategori(){
-        return $this->belongsTo(Kategori::class,'id_kategori');
-
-    }
+    protected $fillable = ["judul_page","isi_page","status_page"];
 }

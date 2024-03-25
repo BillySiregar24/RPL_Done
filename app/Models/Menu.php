@@ -4,9 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Kategori extends Model
+class Menu extends Model
 {
-    protected $table = "kategori";
-    protected $primaryKey = "id_kategori";
-    protected $fillable = ["nama_kategori"];
+    protected $table = "menu";
+    protected $primaryKey = "id_menu";
+    protected $fillable = ["nama_menu", "jenis_menu", "url_menu", "target_menu", "urutan_menu", "parent_menu", "status_menu"];
+
+    public function submenu(){
+        return $this->hasMany(Menu::class, 'parent_menu', 'id_menu');
+    }
 }
